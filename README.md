@@ -4,7 +4,7 @@
 
 ## Here's what i'll learn and what i've learned in this course !
 
-### React, NodeJS, Express & MongoDB - The MERN Fullstack Guide
+#### React, NodeJS, Express & MongoDB - The MERN Fullstack Guide
 #### Build fullstack React.js applications with Node.js, Express.js & MongoDB (MERN) with this project-focused course.
 
 ### Section 1 ⏳
