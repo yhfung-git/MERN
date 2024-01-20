@@ -1,8 +1,6 @@
-import React from 'react';
+import "./Button.css";
 
-import './Button.css';
-
-const Button = props => {
+const Button = (props) => {
   return (
     <button className="button" type={props.type}>
       {props.children}

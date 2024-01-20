@@ -1,8 +1,6 @@
-import React from 'react';
+import "./Header.css";
 
-import './Header.css';
-
-const Header = props => {
+const Header = (props) => {
   return (
     <header className="header">
       <h1>MERN Shop</h1>

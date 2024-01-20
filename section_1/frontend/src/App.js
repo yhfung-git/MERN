@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from "react";
 
-import Header from './components/Header/Header';
-import NewProduct from './components/Products/NewProduct';
-import ProductList from './components/Products/ProductList';
-import './App.css';
+import Header from "./components/Header/Header";
+import NewProduct from "./components/Products/NewProduct";
+import ProductList from "./components/Products/ProductList";
+import "./App.css";
 
 function App() {
   const [loadedProducts, setLoadedProducts] = useState([]);
@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch('http://localhost:5000/products');
+      const response = await fetch("http://localhost:5000/products");
 
       const responseData = await response.json();
 
@@ -27,15 +27,15 @@ function App() {
     try {
       const newProduct = {
         title: productName,
-        price: +productPrice // "+" to convert string to number
+        price: +productPrice, // "+" to convert string to number
       };
       let hasError = false;
-      const response = await fetch('http://localhost:5000/product', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/product", {
+        method: "POST",
         body: JSON.stringify(newProduct),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       if (!response.ok) {
@@ -48,26 +48,26 @@ function App() {
         throw new Error(responseData.message);
       }
 
-      setLoadedProducts(prevProducts => {
+      setLoadedProducts((prevProducts) => {
         return prevProducts.concat({
           ...newProduct,
-          id: responseData.product.id
+          id: responseData.product.id,
         });
       });
     } catch (error) {
-      alert(error.message || 'Something went wrong!');
+      alert(error.message || "Something went wrong!");
     }
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
       <Header />
       <main>
         <NewProduct onAddProduct={addProductHandler} />
         {isLoading && <p className="loader">Loading...</p>}
         {!isLoading && <ProductList items={loadedProducts} />}
       </main>
-    </React.Fragment>
+    </Fragment>
   );
 }
 

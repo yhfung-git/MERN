@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-import Input from '../Input/Input';
-import Button from '../Button/Button';
-import './NewProduct.css';
+import Input from "../Input/Input";
+import Button from "../Button/Button";
+import "./NewProduct.css";
 
-const NewProduct = props => {
-  const [enteredTitle, setEnteredTitle] = useState('');
-  const [enteredPrice, setEnteredPrice] = useState('');
+const NewProduct = (props) => {
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredPrice, setEnteredPrice] = useState("");
 
-  const titleChangeHandler = event => {
+  const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
   };
 
-  const priceChangeHandler = event => {
+  const priceChangeHandler = (event) => {
     setEnteredPrice(event.target.value);
   };
 
-  const submitProductHandler = event => {
+  const submitProductHandler = (event) => {
     event.preventDefault();
     props.onAddProduct(enteredTitle, enteredPrice);
   };
