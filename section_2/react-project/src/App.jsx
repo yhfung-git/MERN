@@ -11,8 +11,8 @@ const App = () => {
       <MainNavigation />
       <main>
         <Routes>
-          <Route path="/" exact element={<Users />} />
-          <Route path="/places/new" exact element={<NewPlace />} />
+          <Route path="/" element={<Users />} />
+          <Route path="/places/new" element={<NewPlace />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
