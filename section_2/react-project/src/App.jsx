@@ -1,16 +1,22 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
+import MainNavigation from "./shared/components/Navigation/MainNavigation/MainNavigation";
 import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import "./App.css";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" exact element={<Users />} />
-      <Route path="/places/new" exact element={<NewPlace />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <>
+      <MainNavigation />
+      <main>
+        <Routes>
+          <Route path="/" exact element={<Users />} />
+          <Route path="/places/new" exact element={<NewPlace />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+    </>
   );
 };
 
