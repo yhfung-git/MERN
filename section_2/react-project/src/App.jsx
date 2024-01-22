@@ -2,8 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainNavigation from "./shared/components/Navigation/MainNavigation/MainNavigation";
 import Users from "./user/pages/Users";
-import NewPlace from "./places/pages/NewPlace";
-import UserPlaces from "./places/pages/UserPlaces";
+import NewPlace from "./places/pages/NewPlace/NewPlace";
+import UserPlaces from "./places/pages/UserPlaces/UserPlaces";
 import "./App.css";
 
 const App = () => {
