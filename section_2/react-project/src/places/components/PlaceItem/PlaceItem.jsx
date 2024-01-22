@@ -3,6 +3,7 @@ import { useState } from "react";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button/Button";
+import Map from "../../../shared/components/UIElements/Map/Map";
 import "./PlaceItem.css";
 
 const PlaceItem = (props) => {
@@ -20,13 +21,13 @@ const PlaceItem = (props) => {
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
-        header={props.address}
+        header={props.title}
         contentClass="place-item__modal-content"
         footerClass="place-item__modal-actions"
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>THE MAP!</h2>
+          <Map location={props.location} address={props.address} />
         </div>
       </Modal>
       <li className="place-item">
