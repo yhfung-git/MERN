@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 
 import PlaceList from "../../components/PlaceList/PlaceList";
-import { PLACES } from "../../../../places";
+import { PLACES } from "../../../DUMMY_DATA";
 
 const UserPlaces = () => {
   const { userId } = useParams();
