@@ -19,3 +19,19 @@ export const PLACES = [
     creator: "u2",
   },
 ];
+
+export const USERS = [
+  {
+    id: "u1",
+    name: "Howard",
+    image: "https://media.timeout.com/images/105481350/750/562/image.jpg",
+    places: 3,
+  },
+  {
+    id: "u2",
+    name: "Paul",
+    image:
+      "https://www.elitesingles.co.uk/wp-content/uploads/sites/59/2019/11/2b_en_articleslide_sm2-350x264.jpg",
+    places: 1,
+  },
+];
