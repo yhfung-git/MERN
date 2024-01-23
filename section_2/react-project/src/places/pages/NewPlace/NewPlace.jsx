@@ -35,6 +35,7 @@ const NewPlace = () => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: {
       title: { value: "", isValid: false },
+      address: { value: "", isValid: false },
       description: { value: "", isValid: false },
     },
     isValid: false,
@@ -44,8 +45,14 @@ const NewPlace = () => {
     dispatch({ type: "INPUT_CHANGE", inputId: id, value, isValid });
   }, []);
 
+  const placeSubmitHandler = (event) => {
+    event.preventDefault();
+
+    console.log("Form Submitted:", formState.inputs);
+  };
+
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={placeSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -54,6 +61,16 @@ const NewPlace = () => {
         placeholder="Enter a title..."
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title"
+        onInput={inputHandler}
+      />
+      <Input
+        id="address"
+        element="input"
+        type="text"
+        label="Address"
+        placeholder="Enter an address..."
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter a valid address"
         onInput={inputHandler}
       />
       <Input
