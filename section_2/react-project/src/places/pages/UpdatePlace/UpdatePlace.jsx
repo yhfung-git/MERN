@@ -9,6 +9,7 @@ import {
 } from "../../../shared/util/validators";
 import Input from "../../../shared/components/FormElements/Input/Input";
 import Button from "../../../shared/components/FormElements/Button/Button";
+import Card from "../../../shared/components/UIElements/Card/Card";
 import "./UpdatePlace.css";
 
 const UpdatePlace = () => {
@@ -45,7 +46,9 @@ const UpdatePlace = () => {
   if (!place) {
     return (
       <div className="center">
-        <h2>Could not find place!</h2>
+        <Card>
+          <h2>Could not find place!</h2>
+        </Card>
       </div>
     );
   }
