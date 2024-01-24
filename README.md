@@ -13,13 +13,13 @@
 
 - Planning the app
 
-### Section 2 ⏳
+### Section 2 ✅
 
 - React.js - Refresher
 
 - React.js - Building the frontend
 
-### Section 3 📌
+### Section 3 ⏳
 
 - Node.js & Express.js - Refresher
 
