@@ -24,12 +24,16 @@ exports.USERS = [
   {
     id: "u1",
     name: "Howard",
+    email: "howard@gmail.com",
+    password: "howard123",
     image: "https://media.timeout.com/images/105481350/750/562/image.jpg",
     places: 3,
   },
   {
     id: "u2",
     name: "Paul",
+    email: "paul@gmail.com",
+    password: "paul01234",
     image:
       "https://www.elitesingles.co.uk/wp-content/uploads/sites/59/2019/11/2b_en_articleslide_sm2-350x264.jpg",
     places: 1,
