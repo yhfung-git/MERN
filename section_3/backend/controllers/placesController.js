@@ -31,3 +31,27 @@ exports.getPlacesByUserId = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.createPlace = async (req, res, next) => {
+  try {
+    const { title, description, location, address, creator, image } = req.body;
+    const createdPlace = {
+      id: Date.now().toString(),
+      title,
+      description,
+      location,
+      address,
+      creator,
+      image,
+    };
+
+    PLACES.push(createdPlace);
+
+    res
+      .status(201)
+      .json({ message: "New place created!", place: createdPlace });
+  } catch (error) {
+    console.error(">>> createPlace", error);
+    next(error);
+  }
+};
