@@ -7,14 +7,18 @@ const {
   updatePlace,
   deletePlace,
 } = require("../controllers/placesControllers");
+const {
+  checkUpdatePlaceInput,
+  checkCreatePlaceInput,
+} = require("../helpers/validators");
 
 const router = express.Router();
 
-router.post("/new", createPlace);
+router.post("/new", checkCreatePlaceInput, createPlace);
 
 router.get("/show/:pid", getPlaceById);
 
-router.patch("/update/:pid", updatePlace);
+router.patch("/update/:pid", checkUpdatePlaceInput, updatePlace);
 
 router.delete("/delete/:pid", deletePlace);
 

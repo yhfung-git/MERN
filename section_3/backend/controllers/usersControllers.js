@@ -1,5 +1,7 @@
 const { USERS } = require("../DUMMY_DATA");
 const { throwError } = require("../helpers/errorHandler");
+const { validationErrorHandler } = require("../helpers/validationErrorHandler");
+const { normalizeEmail } = require("validator");
 
 exports.getUsers = async (req, res, next) => {
   try {
@@ -12,21 +14,18 @@ exports.getUsers = async (req, res, next) => {
 
 exports.singup = async (req, res, next) => {
   try {
+    const validationPassed = await validationErrorHandler(req, res, next);
+    if (!validationPassed) return;
+
     const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-      throwError(401, "All fields are required");
-    }
-
-    const existingUser = USERS.find((u) => u.email === email);
-    if (existingUser) throwError(422, "email already exists");
 
     const newUser = {
       id: Date.now().toString(),
       name,
       email,
       password,
-      image: "",
+      image:
+        "https://buffer.com/library/content/images/2023/10/free-images.jpg",
       places: 0,
     };
     USERS.push(newUser);
@@ -42,9 +41,12 @@ exports.singup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
+    const validationPassed = await validationErrorHandler(req, res, next);
+    if (!validationPassed) return;
+
     const { email, password } = req.body;
 
-    const user = USERS.find((u) => u.email === email);
+    const user = USERS.find((u) => u.email === normalizeEmail(email));
     if (!user || user.password !== password) {
       throwError(401, "Invalid email or password");
     }
