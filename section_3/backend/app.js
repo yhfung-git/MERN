@@ -2,6 +2,7 @@ const express = require("express");
 
 const placesRoutes = require("./routes/placesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const errorsRoutes = require("./routes/errorsRoutes");
 
 const app = express();
 const port = 5000;
@@ -10,6 +11,7 @@ app.use(express.json());
 
 app.use("/api/users", usersRoutes);
 app.use("/api/places", placesRoutes);
+app.use(errorsRoutes);
 
 app.use((error, req, res, next) => {
   if (res.headersSent) {
