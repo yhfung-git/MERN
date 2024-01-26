@@ -1,12 +1,13 @@
 const express = require("express");
 
-const { USERS } = require("../DUMMY_DATA");
+const { getUsers, singup, login } = require("../controllers/usersControllers");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  const users = USERS.map((user) => user);
-  res.status(200).json({ users });
-});
+router.post("/signup", singup);
+
+router.post("/login", login);
+
+router.get("/", getUsers);
 
 module.exports = router;
