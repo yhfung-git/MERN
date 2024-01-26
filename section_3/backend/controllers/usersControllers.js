@@ -15,11 +15,11 @@ exports.singup = async (req, res, next) => {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
-      throwError(400, "All fields are required");
+      throwError(401, "All fields are required");
     }
 
     const existingUser = USERS.find((u) => u.email === email);
-    if (existingUser) throwError(409, "email already exists");
+    if (existingUser) throwError(422, "email already exists");
 
     const newUser = {
       id: Date.now().toString(),
