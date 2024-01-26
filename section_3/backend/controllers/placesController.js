@@ -1,4 +1,4 @@
-const { PLACES, USERS } = require("../DUMMY_DATA");
+let { PLACES, USERS } = require("../DUMMY_DATA");
 const { throwError } = require("../helpers/errorHandler");
 
 exports.getPlaceById = async (req, res, next) => {
@@ -22,7 +22,7 @@ exports.getPlacesByUserId = async (req, res, next) => {
     const user = USERS.find((u) => u.id === uid);
     if (!user) throwError(404, "User not found.");
 
-    const places = PLACES.filter((p) => p.creator === user.id);
+    const places = PLACES.filter((p) => p.creator === uid);
     if (places.length === 0) throwError(404, "No places for this user.");
 
     res.status(200).json({ places });
@@ -52,6 +52,46 @@ exports.createPlace = async (req, res, next) => {
       .json({ message: "New place created!", place: createdPlace });
   } catch (error) {
     console.error(">>> createPlace", error);
+    next(error);
+  }
+};
+
+exports.updatePlace = async (req, res, next) => {
+  try {
+    const { pid } = req.params;
+    const { title, description } = req.body;
+
+    const place = PLACES.find((p) => p.id === pid);
+    if (!place) throwError(404, "Could not find a place for the provided id.");
+
+    const updatedPlace = {
+      ...place,
+      title,
+      description,
+    };
+
+    const placeIndex = PLACES.findIndex((p) => p.id === pid);
+    PLACES[placeIndex] = updatedPlace;
+
+    res.status(200).json({ message: "Place updated!", place: updatedPlace });
+  } catch (error) {
+    console.error(">>> updatePlace", error);
+    next(error);
+  }
+};
+
+exports.deletePlace = async (req, res, next) => {
+  try {
+    const { pid } = req.params;
+
+    const place = PLACES.find((p) => p.id === pid);
+    if (!place) throwError(404, "Could not find a place for the provided id.");
+
+    PLACES = PLACES.filter((p) => p.id !== pid);
+
+    res.status(200).json({ message: "Place deleted!" });
+  } catch (error) {
+    console.error(">>> deletePlace", error);
     next(error);
   }
 };
