@@ -23,7 +23,6 @@ exports.getPlacesByUserId = async (req, res, next) => {
     if (!user) throwError(404, "User not found.");
 
     const places = PLACES.filter((p) => p.creator === uid);
-    if (places.length === 0) throwError(404, "No places for this user.");
 
     res.status(200).json({ places });
   } catch (error) {
