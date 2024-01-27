@@ -1,7 +1,10 @@
 const express = require("express");
 
-const { mongoConnect } = require("./database");
-const { createProduct, getProduct } = require("./productsControllers");
+const { mongoConnect } = require("./utils/database");
+const {
+  createProduct,
+  getProduct,
+} = require("./controllers/productsControllers");
 
 const app = express();
 const port = 3000;

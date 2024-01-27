@@ -1,4 +1,4 @@
-const { getDb } = require("./database");
+const { getDb } = require("../utils/database");
 
 exports.createProduct = async (req, res, next) => {
   try {
