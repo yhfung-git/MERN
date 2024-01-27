@@ -2,6 +2,7 @@ let { PLACES, USERS } = require("../DUMMY_DATA");
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
 const getCoordsForAddress = require("../utils/location");
+const Place = require("../models/Place");
 
 exports.getPlaceById = async (req, res, next) => {
   try {
@@ -43,21 +44,21 @@ exports.createPlace = async (req, res, next) => {
     const location = await getCoordsForAddress(address);
     if (!location) return;
 
-    const createdPlace = {
-      id: Date.now().toString(),
+    const createdPlace = new Place({
       title,
       description,
       image,
-      location,
       address,
+      location,
       creator,
-    };
+    });
 
-    PLACES.push(createdPlace);
+    const createdPlaceSaved = await createdPlace.save();
+    if (!createdPlaceSaved) throwError(500, "Failed to create new place");
 
     res
       .status(201)
-      .json({ message: "New place created!", place: createdPlace });
+      .json({ message: "New place created!", place: createdPlaceSaved });
   } catch (error) {
     console.error(">>> createPlace", error);
     next(error);
