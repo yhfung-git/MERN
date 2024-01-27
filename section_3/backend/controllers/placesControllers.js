@@ -1,6 +1,7 @@
 let { PLACES, USERS } = require("../DUMMY_DATA");
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
+const getCoordsForAddress = require("../utils/location");
 
 exports.getPlaceById = async (req, res, next) => {
   try {
@@ -37,15 +38,19 @@ exports.createPlace = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { title, description, location, address, creator, image } = req.body;
+    const { title, description, address, creator, image } = req.body;
+
+    const location = await getCoordsForAddress(address);
+    if (!location) return;
+
     const createdPlace = {
       id: Date.now().toString(),
       title,
       description,
+      image,
       location,
       address,
       creator,
-      image,
     };
 
     PLACES.push(createdPlace);
