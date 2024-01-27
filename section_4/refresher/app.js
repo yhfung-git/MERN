@@ -1,9 +1,13 @@
 const express = require("express");
 
-const { mongoConnect } = require("./utils/database");
+// const { mongoConnect } = require("./utils/database");
+const mongoose = require("mongoose");
+require("dotenv").config();
+const { MONGODB_URI } = process.env;
+
 const {
   createProduct,
-  getProduct,
+  getProducts,
 } = require("./controllers/productsControllers");
 
 const app = express();
@@ -13,11 +17,12 @@ app.use(express.json());
 
 app.post("/products", createProduct);
 
-app.get("/products", getProduct);
+app.get("/products", getProducts);
 
 (async () => {
   try {
-    await mongoConnect();
+    await mongoose.connect(MONGODB_URI);
+
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
     });
