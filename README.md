@@ -19,13 +19,13 @@
 
 - React.js - Building the frontend
 
-### Section 3 ⏳
+### Section 3 ✅
 
 - Node.js & Express.js - Refresher
 
 - Node.js & Express.js - Building REST APIs backend
 
-### Section 4 📌
+### Section 4 ⏳
 
 - Working with MongoDB & Mongoose - Refresher
 
