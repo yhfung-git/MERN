@@ -1,4 +1,8 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
+require("dotenv").config();
+const { MONGODB_URI } = process.env;
 
 const placesRoutes = require("./routes/placesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
@@ -24,6 +28,15 @@ app.use((error, req, res, next) => {
   res.status(statusCode).json({ message: errorMessage });
 });
 
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+(async () => {
+  try {
+    await mongoose.connect(MONGODB_URI);
+
+    app.listen(port, () => {
+      console.log(`Server is listening on port ${port}`);
+    });
+  } catch (error) {
+    console.error(">>> Server & Mongoose Connect", error);
+    throw error;
+  }
+})();
