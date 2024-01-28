@@ -1,14 +1,14 @@
-let { PLACES, USERS } = require("../DUMMY_DATA");
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
 const getCoordsForAddress = require("../utils/location");
 const Place = require("../models/Place");
+const User = require("../models/User");
 
 exports.getPlaceById = async (req, res, next) => {
   try {
     const { pid } = req.params;
 
-    const place = PLACES.find((p) => p.id === pid);
+    const place = await Place.findById(pid);
     if (!place) throwError(404, "Could not find a place for the provided id.");
 
     res.status(200).json({ place });
@@ -22,10 +22,10 @@ exports.getPlacesByUserId = async (req, res, next) => {
   try {
     const { uid } = req.params;
 
-    const user = USERS.find((u) => u.id === uid);
-    if (!user) throwError(404, "User not found.");
+    const user = await User.findById(uid);
+    if (!user) throwError(404, "User not found");
 
-    const places = PLACES.filter((p) => p.creator === uid);
+    const places = await Place.find({ creator: uid });
 
     res.status(200).json({ places });
   } catch (error) {
@@ -73,17 +73,13 @@ exports.updatePlace = async (req, res, next) => {
     const { pid } = req.params;
     const { title, description } = req.body;
 
-    const place = PLACES.find((p) => p.id === pid);
-    if (!place) throwError(404, "Could not find a place for the provided id.");
+    const updatedPlace = await Place.findByIdAndUpdate(
+      pid,
+      { title, description },
+      { new: true, runValidators: true }
+    );
 
-    const updatedPlace = {
-      ...place,
-      title,
-      description,
-    };
-
-    const placeIndex = PLACES.findIndex((p) => p.id === pid);
-    PLACES[placeIndex] = updatedPlace;
+    if (!updatedPlace) throwError(500, "Failed to update the place");
 
     res.status(200).json({ message: "Place updated!", place: updatedPlace });
   } catch (error) {
@@ -96,10 +92,8 @@ exports.deletePlace = async (req, res, next) => {
   try {
     const { pid } = req.params;
 
-    const place = PLACES.find((p) => p.id === pid);
-    if (!place) throwError(404, "Could not find a place for the provided id.");
-
-    PLACES = PLACES.filter((p) => p.id !== pid);
+    const deletedPlace = await Place.findByIdAndDelete(pid);
+    if (!deletedPlace) throwError(500, "Failed to delete the place");
 
     res.status(200).json({ message: "Place deleted!" });
   } catch (error) {
