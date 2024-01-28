@@ -15,7 +15,7 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-exports.singup = async (req, res, next) => {
+exports.signup = async (req, res, next) => {
   try {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
