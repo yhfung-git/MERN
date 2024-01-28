@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
 const getCoordsForAddress = require("../utils/location");
@@ -22,10 +24,9 @@ exports.getPlacesByUserId = async (req, res, next) => {
   try {
     const { uid } = req.params;
 
-    const user = await User.findById(uid);
+    const user = await User.findById(uid).populate("places");
     if (!user) throwError(404, "User not found");
-
-    const places = await Place.find({ creator: uid });
+    const places = user.places;
 
     res.status(200).json({ places });
   } catch (error) {
@@ -41,6 +42,9 @@ exports.createPlace = async (req, res, next) => {
 
     const { title, description, address, creator, image } = req.body;
 
+    const user = await User.findById(creator);
+    if (!user) throwError(404, "User not found");
+
     const location = await getCoordsForAddress(address);
     if (!location) return;
 
@@ -53,8 +57,17 @@ exports.createPlace = async (req, res, next) => {
       creator,
     });
 
-    const createdPlaceSaved = await createdPlace.save();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    const createdPlaceSaved = await createdPlace.save({ session });
     if (!createdPlaceSaved) throwError(500, "Failed to create new place");
+
+    user.places.push(createdPlaceSaved);
+    const userSaved = await user.save({ session });
+    if (!userSaved) throwError(500, "Failed to update user's places");
+
+    await session.commitTransaction();
 
     res
       .status(201)
@@ -92,8 +105,25 @@ exports.deletePlace = async (req, res, next) => {
   try {
     const { pid } = req.params;
 
-    const deletedPlace = await Place.findByIdAndDelete(pid);
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    const place = await Place.findById(pid);
+    if (!place) throwError(404, "Place not found");
+
+    const updatedUserPlaces = await User.updateOne(
+      { _id: place.creator },
+      { $pull: { places: pid } },
+      { session }
+    );
+    if (updatedUserPlaces.modifiedCount === 0) {
+      throwError(500, "Failed to remove place from user's places");
+    }
+
+    const deletedPlace = await Place.findByIdAndDelete(pid).session(session);
     if (!deletedPlace) throwError(500, "Failed to delete the place");
+
+    await session.commitTransaction();
 
     res.status(200).json({ message: "Place deleted!" });
   } catch (error) {
