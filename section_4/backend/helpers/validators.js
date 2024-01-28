@@ -1,5 +1,5 @@
 const { body } = require("express-validator");
-const { USERS } = require("../DUMMY_DATA");
+const User = require("../models/User");
 
 exports.checkUpdatePlaceInput = [
   body("title")
@@ -37,8 +37,8 @@ exports.checkSignupInput = [
     .isEmail()
     .withMessage("You must enter a valid email")
     .custom(async (value) => {
-      const email = USERS.find((u) => u.email === value);
-      if (email) {
+      const user = await User.findOne({ email: value });
+      if (user) {
         throw new Error("Email already exists");
       }
       return true;
