@@ -20,7 +20,7 @@ exports.singup = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { name, email, password, image } = req.body;
+    const { name, email, password } = req.body;
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -28,7 +28,8 @@ exports.singup = async (req, res, next) => {
       name,
       email,
       password: hashedPassword,
-      image,
+      image:
+        "https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg",
       places: [],
     });
 
