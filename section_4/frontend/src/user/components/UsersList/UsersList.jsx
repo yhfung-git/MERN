@@ -8,7 +8,7 @@ const UsersList = (props) => {
         {props.users.length === 0 ? (
           <h2>No users found!</h2>
         ) : (
-          props.users.map((user) => <UserItem key={user.id} {...user} />)
+          props.users.map((user) => <UserItem key={user._id} {...user} />)
         )}
       </ul>
     </div>
