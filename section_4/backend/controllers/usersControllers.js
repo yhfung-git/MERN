@@ -20,9 +20,9 @@ exports.signup = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { name, email, password } = req.body;
+    const { name, email } = req.body;
     const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
     const newUser = new User({
       name,
@@ -36,9 +36,12 @@ exports.signup = async (req, res, next) => {
     const newUserSaved = await newUser.save();
     if (!newUserSaved) throwError(500, "Failed to create account");
 
-    res
-      .status(201)
-      .json({ message: "You've successfully signed up!", user: newUserSaved });
+    const { password, ...userExcludedPassword } = newUserSaved._doc;
+
+    res.status(201).json({
+      message: "You've successfully signed up!",
+      user: userExcludedPassword,
+    });
   } catch (error) {
     console.error(">>> signup", error);
     next(error);
