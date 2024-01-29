@@ -13,7 +13,7 @@ const PlaceList = (props) => {
             <Button to="/places/new">Add Place</Button>
           </Card>
         ) : (
-          props.places.map((place) => <PlaceItem key={place.id} {...place} />)
+          props.places.map((place) => <PlaceItem key={place._id} {...place} />)
         )}
       </ul>
     </div>

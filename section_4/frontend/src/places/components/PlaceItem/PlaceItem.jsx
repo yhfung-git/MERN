@@ -83,7 +83,7 @@ const PlaceItem = (props) => {
             </Button>
             {auth.isLoggedIn && (
               <>
-                <Button to={`/places/${props.id}`}>EDIT</Button>
+                <Button to={`/places/${props._id}`}>EDIT</Button>
                 <Button danger onClick={showDeleteWarningHandler}>
                   DELETE
                 </Button>
