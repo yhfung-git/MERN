@@ -51,7 +51,7 @@ exports.createPlace = async (req, res, next) => {
     const createdPlace = new Place({
       title,
       description,
-      image,
+      image: "https://www.samm-honfleur.com/gallery/20191224113524(9).jpg",
       address,
       location,
       creator,
