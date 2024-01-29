@@ -58,7 +58,7 @@ exports.login = async (req, res, next) => {
     const passwordMatched = await bcrypt.compare(password, user.password);
     if (!passwordMatched) throwError(401, "Invalid email or password");
 
-    res.status(200).json({ message: "Logged in!" });
+    res.status(200).json({ message: "Logged in!", userId: user._id });
   } catch (error) {
     console.error(">>> login", error);
     next(error);
