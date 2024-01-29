@@ -1,17 +1,27 @@
+import { useContext } from "react";
+
+import { AuthContext } from "../../../shared/context/auth-context";
 import PlaceItem from "../PlaceItem/PlaceItem";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import "./PlaceList.css";
 
 const PlaceList = (props) => {
+  const auth = useContext(AuthContext);
   return (
     <div className="center">
       <ul className="place-list">
         {props.places.length === 0 ? (
-          <Card>
-            <h2>No places found. Maybe add one?</h2>
-            <Button to="/places/new">Add Place</Button>
-          </Card>
+          props.userId === auth.userId ? (
+            <Card>
+              <h2>No places found. Maybe add one?</h2>
+              <Button to="/places/new">Add Place</Button>
+            </Card>
+          ) : (
+            <Card>
+              <h2>No places found</h2>
+            </Card>
+          )
         ) : (
           props.places.map((place) => (
             <PlaceItem key={place._id} {...place} onDelete={props.onDelete} />

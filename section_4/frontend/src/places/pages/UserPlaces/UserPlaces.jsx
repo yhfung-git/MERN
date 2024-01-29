@@ -37,7 +37,7 @@ const UserPlaces = () => {
           <LoadingSpinner />
         </div>
       )}
-      <PlaceList places={places} onDelete={deleteHandler} />
+      <PlaceList places={places} userId={userId} onDelete={deleteHandler} />
     </>
   );
 };
