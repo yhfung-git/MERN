@@ -19,7 +19,7 @@ const PlaceList = (props) => {
             </Card>
           ) : (
             <Card>
-              <h2>No places found</h2>
+              <h2>This user does not have any places.</h2>
             </Card>
           )
         ) : (
