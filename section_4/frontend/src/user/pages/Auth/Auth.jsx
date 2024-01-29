@@ -71,7 +71,7 @@ const Auth = () => {
           { "Content-Type": "application/json" }
         );
 
-    if (response !== null) auth.login(response.userId);
+    if (response !== null) auth.login(response.userId || response.user._id);
   };
 
   return (
