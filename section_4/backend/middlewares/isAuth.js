@@ -4,6 +4,8 @@ const { throwError } = require("../helpers/errorHandler");
 
 module.exports = async (req, res, next) => {
   try {
+    if (req.method === "OPTIONS") return next();
+
     const token = await req.get("Authorization")?.split(" ")[1];
     if (!token) throwError(401, "Invalid token");
 
