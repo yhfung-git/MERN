@@ -53,30 +53,35 @@ const Auth = () => {
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
-    console.log(formState.inputs);
+    if (isLoginMode) {
+      const response = await sendRequest(
+        "http://localhost:5000/api/users/login",
+        "POST",
+        JSON.stringify({
+          email: formState.inputs.email.value,
+          password: formState.inputs.password.value,
+        }),
+        { "Content-Type": "application/json" }
+      );
 
-    const response = isLoginMode
-      ? await sendRequest(
-          "http://localhost:5000/api/users/login",
-          "POST",
-          JSON.stringify({
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          { "Content-Type": "application/json" }
-        )
-      : await sendRequest(
-          "http://localhost:5000/api/users/signup",
-          "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          { "Content-Type": "application/json" }
-        );
+      if (response !== null) auth.login(response.user._id);
+    } else {
+      const formData = new FormData();
+      const { name, email, password, image } = formState.inputs;
 
-    if (response !== null) auth.login(response.userId || response.user._id);
+      formData.append("name", name.value);
+      formData.append("email", email.value);
+      formData.append("password", password.value);
+      formData.append("image", image.value);
+
+      const response = await sendRequest(
+        "http://localhost:5000/api/users/signup",
+        "POST",
+        formData
+      );
+
+      if (response !== null) auth.login(response.user._id);
+    }
   };
 
   return (
