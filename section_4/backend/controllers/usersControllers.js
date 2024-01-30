@@ -1,4 +1,7 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const { JWT_PASSKEY } = process.env;
 
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
@@ -20,9 +23,9 @@ exports.signup = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
     const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = new User({
       name,
@@ -35,11 +38,15 @@ exports.signup = async (req, res, next) => {
     const newUserSaved = await newUser.save();
     if (!newUserSaved) throwError(500, "Failed to create account");
 
-    const { password, ...userExcludedPassword } = newUserSaved._doc;
+    const userId = newUserSaved._id.toString();
+    const token = jwt.sign({ userId }, JWT_PASSKEY, {
+      expiresIn: "1h",
+    });
 
     res.status(201).json({
       message: "You've successfully signed up!",
-      user: userExcludedPassword,
+      userId,
+      token,
     });
   } catch (error) {
     console.error(">>> signup", error);
@@ -49,22 +56,23 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email: normalizeEmail(email) });
     if (!user) throwError(401, "Invalid email or password");
 
-    const passwordMatched = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const passwordMatched = await bcrypt.compare(password, user.password);
     if (!passwordMatched) throwError(401, "Invalid email or password");
 
-    const { password, ...userExcludedPassword } = user._doc;
+    const userId = user._id.toString();
+    const token = jwt.sign({ userId }, JWT_PASSKEY, {
+      expiresIn: "1h",
+    });
 
     res.status(200).json({
       message: "You've successfully logged in!",
-      user: userExcludedPassword,
+      userId,
+      token,
     });
   } catch (error) {
     console.error(">>> login", error);
