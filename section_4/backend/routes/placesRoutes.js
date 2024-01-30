@@ -11,14 +11,25 @@ const {
   checkUpdatePlaceInput,
   checkCreatePlaceInput,
 } = require("../helpers/validators");
+const fileUpload = require("../middlewares/fileUpload");
 
 const router = express.Router();
 
-router.post("/new", checkCreatePlaceInput, createPlace);
+router.post(
+  "/new",
+  fileUpload.single("image"),
+  checkCreatePlaceInput,
+  createPlace
+);
 
 router.get("/show/:pid", getPlaceById);
 
-router.patch("/update/:pid", checkUpdatePlaceInput, updatePlace);
+router.patch(
+  "/update/:pid",
+  fileUpload.single("image"),
+  checkUpdatePlaceInput,
+  updatePlace
+);
 
 router.delete("/delete/:pid", deletePlace);
 
