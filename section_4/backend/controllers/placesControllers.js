@@ -40,7 +40,7 @@ exports.createPlace = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { title, description, address, creator, image } = req.body;
+    const { title, description, address, creator } = req.body;
 
     const user = await User.findById(creator);
     if (!user) throwError(404, "User not found");
@@ -51,7 +51,7 @@ exports.createPlace = async (req, res, next) => {
     const createdPlace = new Place({
       title,
       description,
-      image: "https://www.samm-honfleur.com/gallery/20191224113524(9).jpg",
+      image: req.file.path,
       address,
       location,
       creator,
