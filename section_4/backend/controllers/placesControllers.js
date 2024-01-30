@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
+const { deleteImage } = require("../utils/deleteImage");
 const getCoordsForAddress = require("../utils/location");
 const Place = require("../models/Place");
 const User = require("../models/User");
@@ -124,6 +125,9 @@ exports.deletePlace = async (req, res, next) => {
     if (!deletedPlace) throwError(500, "Failed to delete the place");
 
     await session.commitTransaction();
+
+    const deletedImage = await deleteImage(place.image);
+    if (!deletedImage) console.error("Failed to delete image");
 
     res.status(200).json({ message: "Place deleted!" });
   } catch (error) {
