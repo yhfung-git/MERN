@@ -12,22 +12,24 @@ const {
   checkCreatePlaceInput,
 } = require("../helpers/validators");
 const fileUpload = require("../middlewares/fileUpload");
+const isAuth = require("../middlewares/isAuth");
 
 const router = express.Router();
 
+router.get("/user/:uid", getPlacesByUserId);
+
+router.get("/show/:pid", getPlaceById);
+
 router.post(
   "/new",
+  isAuth,
   fileUpload.single("image"),
   checkCreatePlaceInput,
   createPlace
 );
 
-router.get("/show/:pid", getPlaceById);
+router.patch("/update/:pid", isAuth, checkUpdatePlaceInput, updatePlace);
 
-router.patch("/update/:pid", checkUpdatePlaceInput, updatePlace);
-
-router.delete("/delete/:pid", deletePlace);
-
-router.get("/user/:uid", getPlacesByUserId);
+router.delete("/delete/:pid", isAuth, deletePlace);
 
 module.exports = router;
