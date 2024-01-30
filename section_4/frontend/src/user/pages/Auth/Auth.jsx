@@ -13,6 +13,7 @@ import Button from "../../../shared/components/FormElements/Button/Button";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 import "./Auth.css";
 
 const Auth = () => {
@@ -31,6 +32,7 @@ const Auth = () => {
   const switchModeHandler = () => {
     if (!isLoginMode) {
       delete formState.inputs.name;
+      delete formState.inputs.image;
       setFormData(
         { ...formState.inputs },
         formState.inputs.email.isValid && formState.inputs.password.isValid
@@ -40,6 +42,7 @@ const Auth = () => {
         {
           ...formState.inputs,
           name: { value: "", isValid: false },
+          image: { value: null, isValid: false },
         },
         false
       );
@@ -49,6 +52,8 @@ const Auth = () => {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+
+    console.log(formState.inputs);
 
     const response = isLoginMode
       ? await sendRequest(
@@ -83,16 +88,19 @@ const Auth = () => {
         <hr />
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
-            <Input
-              id="name"
-              element="input"
-              type="text"
-              label="Your Name"
-              placeholder="Enter your name..."
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter a name"
-              onInput={inputHandler}
-            />
+            <>
+              <ImageUpload id="image" center onInput={inputHandler} />
+              <Input
+                id="name"
+                element="input"
+                type="text"
+                label="Your Name"
+                placeholder="Enter your name..."
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="Please enter a name"
+                onInput={inputHandler}
+              />
+            </>
           )}
           <Input
             id="email"
