@@ -49,4 +49,10 @@ exports.checkSignupInput = [
     .withMessage("You must enter a password")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long"),
+  body("image").custom((value, { req }) => {
+    if (!req.file || !req.file.mimetype.startsWith("image")) {
+      throw new Error("Invalid image type");
+    }
+    return true;
+  }),
 ];
