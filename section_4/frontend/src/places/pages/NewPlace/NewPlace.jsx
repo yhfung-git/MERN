@@ -13,6 +13,7 @@ import Input from "../../../shared/components/FormElements/Input/Input";
 import "./NewPlace.css";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 
 const NewPlace = () => {
   const auth = useContext(AuthContext);
@@ -23,6 +24,7 @@ const NewPlace = () => {
       title: { value: "", isValid: false },
       description: { value: "", isValid: false },
       address: { value: "", isValid: false },
+      image: { value: null, isValid: false },
     },
     false
   );
@@ -30,16 +32,18 @@ const NewPlace = () => {
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
 
+    const formData = new FormData();
+    const { title, description, address, image } = formState.inputs;
+    formData.append("title", title.value);
+    formData.append("description", description.value);
+    formData.append("address", address.value);
+    formData.append("image", image.value);
+    formData.append("creator", auth.userId);
+
     const response = await sendRequest(
       "http://localhost:5000/api/places/new",
       "POST",
-      JSON.stringify({
-        title: formState.inputs.title.value,
-        description: formState.inputs.description.value,
-        address: formState.inputs.address.value,
-        creator: auth.userId,
-      }),
-      { "Content-Type": "application/json" }
+      formData
     );
 
     if (response !== null) navigate(`/${auth.userId}/places`);
@@ -50,6 +54,12 @@ const NewPlace = () => {
       <ErrorModal error={error} onClear={clearError} />
       <form className="place-form" onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
+        <ImageUpload
+          id="image"
+          center
+          onInput={inputHandler}
+          errorText="Please provide an image"
+        />
         <Input
           id="title"
           element="input"
