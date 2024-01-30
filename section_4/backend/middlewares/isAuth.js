@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     if (req.method === "OPTIONS") return next();
 
     const token = await req.get("Authorization")?.split(" ")[1];
-    if (!token) throwError(401, "Invalid token");
+    if (!token) throwError(401, "Not authenticated");
 
     const decoded = jwt.verify(token, JWT_PASSKEY, { ignoreExpiration: false });
     if (!decoded) throwError(401, "Not authenticated");
