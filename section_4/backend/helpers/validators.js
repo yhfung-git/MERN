@@ -22,6 +22,12 @@ exports.checkCreatePlaceInput = [
     .trim()
     .exists({ checkFalsy: true })
     .withMessage("You must enter an address"),
+  body("image").custom((value, { req }) => {
+    if (!req.file || !req.file.mimetype.startsWith("image")) {
+      throw new Error("Invalid image type");
+    }
+    return true;
+  }),
 ];
 
 exports.checkSignupInput = [
