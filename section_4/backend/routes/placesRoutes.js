@@ -24,12 +24,7 @@ router.post(
 
 router.get("/show/:pid", getPlaceById);
 
-router.patch(
-  "/update/:pid",
-  fileUpload.single("image"),
-  checkUpdatePlaceInput,
-  updatePlace
-);
+router.patch("/update/:pid", checkUpdatePlaceInput, updatePlace);
 
 router.delete("/delete/:pid", deletePlace);
 
