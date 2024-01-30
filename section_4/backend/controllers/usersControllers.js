@@ -28,8 +28,7 @@ exports.signup = async (req, res, next) => {
       name,
       email,
       password: hashedPassword,
-      image:
-        "https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg",
+      image: req.file.path,
       places: [],
     });
 
@@ -50,15 +49,23 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email } = req.body;
 
     const user = await User.findOne({ email: normalizeEmail(email) });
     if (!user) throwError(401, "Invalid email or password");
 
-    const passwordMatched = await bcrypt.compare(password, user.password);
+    const passwordMatched = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
     if (!passwordMatched) throwError(401, "Invalid email or password");
 
-    res.status(200).json({ message: "Logged in!", userId: user._id });
+    const { password, ...userExcludedPassword } = user._doc;
+
+    res.status(200).json({
+      message: "You've successfully logged in!",
+      user: userExcludedPassword,
+    });
   } catch (error) {
     console.error(">>> login", error);
     next(error);
