@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./auth-context";
 
 const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState();
   const [userId, setUserId] = useState();
   const navigate = useNavigate();
 
   const login = useCallback(
-    (uid) => {
-      setIsLoggedIn(true);
+    (uid, token) => {
+      setToken(token);
       setUserId(uid);
       navigate("/");
     },
@@ -17,13 +17,14 @@ const AuthContextProvider = (props) => {
   );
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserId(null);
     navigate("/auth");
   }, [navigate]);
 
   const authContextValue = {
-    isLoggedIn,
+    isLoggedIn: !!token,
+    token,
     userId,
     login,
     logout,
