@@ -19,6 +19,7 @@ export const useHttpClient = () => {
           method,
           headers,
           body,
+          credentials: "include",
           signal,
         });
 
