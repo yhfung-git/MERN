@@ -47,6 +47,7 @@ exports.signup = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: NODE_ENV === "production",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       })
       .status(201)
@@ -79,6 +80,7 @@ exports.login = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: NODE_ENV === "production",
+        sameSite: "Strict",
         maxAge: 60 * 60 * 1000,
       })
       .status(200)
