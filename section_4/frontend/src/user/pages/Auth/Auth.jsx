@@ -64,7 +64,7 @@ const Auth = () => {
         { "Content-Type": "application/json" }
       );
 
-      if (response !== null) auth.login(response.userId, response.token);
+      if (response !== null) auth.login(response.userId);
     } else {
       const formData = new FormData();
       const { name, email, password, image } = formState.inputs;
@@ -80,7 +80,7 @@ const Auth = () => {
         formData
       );
 
-      if (response !== null) auth.login(response.userId, response.token);
+      if (response !== null) auth.login(response.userId);
     }
   };
 
