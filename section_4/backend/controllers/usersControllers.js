@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { JWT_PASSKEY } = process.env;
+const { JWT_PASSKEY, NODE_ENV } = process.env;
 
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
@@ -43,11 +43,17 @@ exports.signup = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    res.status(201).json({
-      message: "You've successfully signed up!",
-      userId,
-      token,
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: NODE_ENV === "production",
+        maxAge: 60 * 60 * 1000,
+      })
+      .status(201)
+      .json({
+        message: "You've successfully signed up!",
+        userId,
+      });
   } catch (error) {
     console.error(">>> signup", error);
     next(error);
@@ -69,11 +75,17 @@ exports.login = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({
-      message: "You've successfully logged in!",
-      userId,
-      token,
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: NODE_ENV === "production",
+        maxAge: 60 * 60 * 1000,
+      })
+      .status(200)
+      .json({
+        message: "You've successfully logged in!",
+        userId,
+      });
   } catch (error) {
     console.error(">>> login", error);
     next(error);
