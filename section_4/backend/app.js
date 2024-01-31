@@ -1,9 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
-const { MONGODB_URI } = process.env;
+const { MONGODB_URI, COOKIE_PARSER_PASS, NODE_ENV } = process.env;
 
 const placesRoutes = require("./routes/placesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
@@ -20,8 +21,14 @@ app.use(
   express.static(path.join(__dirname, "uploads", "images"))
 );
 
+const allowedOrigins = ["http://localhost:3000"];
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader(
     "Access-Control-Allow-Methods",
     "OPTIONS, GET, POST, PATCH, DELETE"
@@ -32,6 +39,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(cookieParser(COOKIE_PARSER_PASS));
 
 app.use("/api/users", usersRoutes);
 app.use("/api/places", placesRoutes);
@@ -58,7 +67,7 @@ app.use(async (error, req, res, next) => {
     await mongoose.connect(MONGODB_URI);
 
     app.listen(port, () => {
-      console.log(`Server is listening on port ${port}`);
+      console.log(`Server is listening on port ${port} in ${NODE_ENV} mode`);
     });
   } catch (error) {
     console.error(">>> Server & Mongoose Connect", error);
