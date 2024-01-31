@@ -91,3 +91,24 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.checkAuthStatus = async (req, res, next) => {
+  try {
+    res.status(200).json({ userId: req.userId });
+  } catch (error) {
+    console.error(">>> checkAuthStatus", error);
+    next(error);
+  }
+};
+
+exports.logout = async (req, res, next) => {
+  try {
+    res
+      .clearCookie("token")
+      .status(200)
+      .json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error(">>> logout", error);
+    next(error);
+  }
+};
