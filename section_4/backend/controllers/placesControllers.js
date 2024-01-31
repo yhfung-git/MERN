@@ -87,6 +87,13 @@ exports.updatePlace = async (req, res, next) => {
     const { pid } = req.params;
     const { title, description } = req.body;
 
+    const place = await Place.findById(pid);
+    if (!place) throwError(404, "Place not found");
+
+    if (place.creator.toString() !== req.userId) {
+      throwError(403, "Not authorized to edit the place");
+    }
+
     const updatedPlace = await Place.findByIdAndUpdate(
       pid,
       { title, description },
@@ -111,6 +118,10 @@ exports.deletePlace = async (req, res, next) => {
 
     const place = await Place.findById(pid);
     if (!place) throwError(404, "Place not found");
+
+    if (place.creator.toString() !== req.userId) {
+      throwError(403, "Not authorized to delete the place");
+    }
 
     const updatedUserPlaces = await User.updateOne(
       { _id: place.creator },
