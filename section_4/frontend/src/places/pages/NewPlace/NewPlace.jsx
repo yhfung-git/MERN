@@ -43,8 +43,7 @@ const NewPlace = () => {
     const response = await sendRequest(
       "http://localhost:5000/api/places/new",
       "POST",
-      formData,
-      { Authorization: `Bearer ${auth.token}` }
+      formData
     );
 
     if (response !== null) navigate(`/${auth.userId}/places`);
