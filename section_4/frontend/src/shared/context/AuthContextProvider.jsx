@@ -3,16 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./auth-context";
 import { useHttpClient } from "../hooks/http-hook";
 
+let logoutTimer;
+
 const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState();
+  const [expiration, setExpiration] = useState();
   const { sendRequest } = useHttpClient();
   const navigate = useNavigate();
 
-  const login = useCallback((uid) => {
+  const login = useCallback((uid, expiration) => {
+    expiration = expiration || Date.now() + 1000 * 60 * 60;
     setIsLoggedIn(true);
     setUserId(uid);
-    localStorage.setItem("loggedIn", "true");
+    setExpiration(expiration);
+
+    localStorage.setItem(
+      "data",
+      JSON.stringify({ loggedIn: "true", expiration })
+    );
   }, []);
 
   const logout = useCallback(async () => {
@@ -22,21 +31,33 @@ const AuthContextProvider = (props) => {
     if (response !== null) {
       setIsLoggedIn(false);
       setUserId(null);
-      localStorage.removeItem("loggedIn");
+      setExpiration(null);
+
+      localStorage.removeItem("data");
       navigate("/auth");
     }
   }, [navigate, sendRequest]);
 
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      const loggedIn = localStorage.getItem("loggedIn");
+    expiration
+      ? (logoutTimer = setTimeout(logout, expiration - Date.now()))
+      : clearTimeout(logoutTimer);
 
-      if (loggedIn === "true") {
+    return () => {
+      clearTimeout(logoutTimer);
+    };
+  }, [expiration, logout]);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const data = JSON.parse(localStorage.getItem("data"));
+
+      if (data?.loggedIn === "true" && data?.expiration > Date.now()) {
         const response = await sendRequest(
           "http://localhost:5000/api/users/auth-status"
         );
 
-        if (response !== null) login(response.userId);
+        if (response !== null) login(response.userId, data.expiration);
       }
     };
     checkAuthStatus();
