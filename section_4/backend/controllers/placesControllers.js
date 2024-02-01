@@ -41,9 +41,9 @@ exports.createPlace = async (req, res, next) => {
     const validationPassed = await validationErrorHandler(req, res, next);
     if (!validationPassed) return;
 
-    const { title, description, address, creator } = req.body;
+    const { title, description, address } = req.body;
 
-    const user = await User.findById(creator);
+    const user = await User.findById(req.userId);
     if (!user) throwError(404, "User not found");
 
     const location = await getCoordsForAddress(address);
@@ -55,7 +55,7 @@ exports.createPlace = async (req, res, next) => {
       image: req.file.path,
       address,
       location,
-      creator,
+      creator: req.userId,
     });
 
     const session = await mongoose.startSession();
