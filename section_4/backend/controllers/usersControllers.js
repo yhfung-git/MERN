@@ -76,9 +76,6 @@ exports.login = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    console.log(NODE_ENV === "production");
-    console.log(NODE_ENV === "development");
-
     res
       .cookie("token", token, {
         httpOnly: true,
