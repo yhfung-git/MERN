@@ -32,3 +32,5 @@
 - Connecting the backend to the database - MongoDB & Mongoose
 
 - Connecting the frontend to the backend
+
+- Deploying the application
