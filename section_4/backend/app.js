@@ -23,7 +23,10 @@ app.use(
   express.static(path.join(__dirname, "uploads", "images"))
 );
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://mern-places-925fa.web.app",
+];
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
