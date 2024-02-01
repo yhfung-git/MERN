@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-require("dotenv").config();
+if (process.env.NODE_ENV === "development") {
+  const envPath = ".env.development";
+  require("dotenv").config({ path: envPath });
+}
 const { MONGODB_URI, COOKIE_PARSER_PASS, PORT } = process.env;
 
 const placesRoutes = require("./routes/placesRoutes");
