@@ -47,6 +47,8 @@ exports.signup = async (req, res, next) => {
       .cookie("token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
+        secure: NODE_ENV === "production" ? true : false,
+        sameSite: NODE_ENV === "production" ? "None" : "Lax",
       })
       .status(201)
       .json({
@@ -74,10 +76,15 @@ exports.login = async (req, res, next) => {
       expiresIn: "1h",
     });
 
+    console.log(NODE_ENV === "production");
+    console.log(NODE_ENV === "development");
+
     res
       .cookie("token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
+        secure: NODE_ENV === "production" ? true : false,
+        sameSite: NODE_ENV === "production" ? "None" : "Lax",
       })
       .status(200)
       .json({
