@@ -96,6 +96,8 @@ exports.login = async (req, res, next) => {
 
 exports.checkAuthStatus = async (req, res, next) => {
   try {
+    if (!req.userId) throwError(401, "Not authenticated");
+
     res.status(200).json({ userId: req.userId });
   } catch (error) {
     console.error(">>> checkAuthStatus", error);
