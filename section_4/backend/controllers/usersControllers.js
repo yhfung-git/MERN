@@ -46,9 +46,7 @@ exports.signup = async (req, res, next) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: NODE_ENV === "development" ? false : true,
         maxAge: 60 * 60 * 1000,
-        sameSite: "None",
       })
       .status(201)
       .json({
@@ -79,9 +77,7 @@ exports.login = async (req, res, next) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: NODE_ENV === "development" ? false : true,
         maxAge: 60 * 60 * 1000,
-        sameSite: "None",
       })
       .status(200)
       .json({
