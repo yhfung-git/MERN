@@ -14,7 +14,7 @@ const UserPlaces = () => {
   useEffect(() => {
     const fetchUserPlaces = async () => {
       const response = await sendRequest(
-        `http://localhost:5000/api/places/user/${userId}`
+        `${import.meta.env.VITE_BASE_URL}/places/user/${userId}`
       );
 
       if (response !== null) setPlaces(response.places);

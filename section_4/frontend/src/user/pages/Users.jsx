@@ -11,7 +11,9 @@ const Users = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await sendRequest("http://localhost:5000/api/users");
+      const response = await sendRequest(
+        `${import.meta.env.VITE_BASE_URL}/users`
+      );
       if (response !== null) setUsers(response.users);
     };
     fetchUsers();

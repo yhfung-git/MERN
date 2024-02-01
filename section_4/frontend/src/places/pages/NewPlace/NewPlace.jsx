@@ -40,7 +40,7 @@ const NewPlace = () => {
     formData.append("image", image.value);
 
     const response = await sendRequest(
-      "http://localhost:5000/api/places/new",
+      `${import.meta.env.VITE_BASE_URL}/places/new`,
       "POST",
       formData
     );

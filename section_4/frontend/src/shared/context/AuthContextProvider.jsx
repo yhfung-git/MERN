@@ -26,7 +26,7 @@ const AuthContextProvider = (props) => {
 
   const logout = useCallback(async () => {
     const response = await sendRequest(
-      "http://localhost:5000/api/users/logout"
+      `${import.meta.env.VITE_BASE_URL}/users/logout`
     );
     if (response !== null) {
       setIsLoggedIn(false);
@@ -54,7 +54,7 @@ const AuthContextProvider = (props) => {
 
       if (data?.loggedIn === "true" && data?.expiration > Date.now()) {
         const response = await sendRequest(
-          "http://localhost:5000/api/users/auth-status"
+          `${import.meta.env.VITE_BASE_URL}/users/auth-status`
         );
 
         if (response !== null) login(response.userId, data.expiration);

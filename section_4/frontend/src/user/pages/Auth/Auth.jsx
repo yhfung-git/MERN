@@ -55,7 +55,7 @@ const Auth = () => {
 
     if (isLoginMode) {
       const response = await sendRequest(
-        "http://localhost:5000/api/users/login",
+        `${import.meta.env.VITE_BASE_URL}/users/login`,
         "POST",
         JSON.stringify({
           email: formState.inputs.email.value,
@@ -75,7 +75,7 @@ const Auth = () => {
       formData.append("image", image.value);
 
       const response = await sendRequest(
-        "http://localhost:5000/api/users/signup",
+        `${import.meta.env.VITE_BASE_URL}/users/signup`,
         "POST",
         formData
       );

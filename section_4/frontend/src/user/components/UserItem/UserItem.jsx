@@ -5,7 +5,7 @@ import Card from "../../../shared/components/UIElements/Card/Card";
 import "./UserItem.css";
 
 const UserItem = (props) => {
-  const image = `http://localhost:5000/${props.image}`;
+  const image = `${import.meta.env.VITE_ASSET_URL}/${props.image}`;
 
   return (
     <li className="user-item">

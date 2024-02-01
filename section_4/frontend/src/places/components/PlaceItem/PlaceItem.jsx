@@ -34,14 +34,14 @@ const PlaceItem = (props) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     const response = await sendRequest(
-      `http://localhost:5000/api/places/delete/${props._id}`,
+      `${import.meta.env.VITE_BASE_URL}/places/delete/${props._id}`,
       "DELETE"
     );
 
     if (response !== null) props.onDelete(props._id);
   };
 
-  const image = `http://localhost:5000/${props.image}`;
+  const image = `${import.meta.env.VITE_ASSET_URL}/${props.image}`;
 
   return (
     <>

@@ -32,7 +32,7 @@ const UpdatePlace = () => {
   useEffect(() => {
     const fetchPlace = async () => {
       const response = await sendRequest(
-        `http://localhost:5000/api/places/show/${placeId}`
+        `${import.meta.env.VITE_BASE_URL}/places/show/${placeId}`
       );
 
       if (response !== null) {
@@ -54,7 +54,7 @@ const UpdatePlace = () => {
     event.preventDefault();
 
     const response = await sendRequest(
-      `http://localhost:5000/api/places/update/${placeId}`,
+      `${import.meta.env.VITE_BASE_URL}/places/update/${placeId}`,
       "PATCH",
       JSON.stringify({
         title: formState.inputs.title.value,
