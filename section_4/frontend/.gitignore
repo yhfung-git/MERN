@@ -23,12 +23,14 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
-.firebase
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase Hosting Cache
+/.firebase/hosting.ZGlzdA.cache
 
 # Env
 .env*
