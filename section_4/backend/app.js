@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
-const { MONGODB_URI, COOKIE_PARSER_PASS, NODE_ENV, PORT } = process.env;
+const { MONGODB_URI, COOKIE_PARSER_PASS, PORT } = process.env;
 
 const placesRoutes = require("./routes/placesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
@@ -66,7 +66,7 @@ app.use(async (error, req, res, next) => {
     await mongoose.connect(MONGODB_URI);
 
     app.listen(PORT || 5000, () => {
-      console.log(`Server is listening on port ${PORT} in ${NODE_ENV} mode`);
+      console.log(`Server is listening on port ${PORT}`);
     });
   } catch (error) {
     console.error(">>> Server & Mongoose Connect", error);
