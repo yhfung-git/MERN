@@ -5,14 +5,12 @@ import Card from "../../../shared/components/UIElements/Card/Card";
 import "./UserItem.css";
 
 const UserItem = (props) => {
-  const image = `${import.meta.env.VITE_ASSET_URL}/${props.image}`;
-
   return (
     <li className="user-item">
       <Card className="user-item__content">
         <Link to={`/${props._id}/places`}>
           <div className="user-item__image">
-            <Avatar image={image} alt={props.name} />
+            <Avatar image={props.image} alt={props.name} />
           </div>
           <div className="user-item__info">
             <h2>{props.name}</h2>
