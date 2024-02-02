@@ -145,7 +145,7 @@ exports.deletePlace = async (req, res, next) => {
     if (place.image) {
       const imageId = await extractImageId(place.image);
       const deletedImage = await cloudinary.uploader.destroy(imageId);
-      if (!deletedImage) throwError(500, "Failed to delete image");
+      if (!deletedImage) console.error("Failed to delete image");
     }
 
     res.status(200).json({ message: "Place deleted!" });
