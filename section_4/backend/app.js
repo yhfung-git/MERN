@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const path = require("path");
 const cookieParser = require("cookie-parser");
+const cloudinary = require("cloudinary").v2;
 
 if (process.env.NODE_ENV === "development") {
   const envPath = ".env.development";
@@ -13,7 +13,7 @@ const placesRoutes = require("./routes/placesRoutes");
 const usersRoutes = require("./routes/usersRoutes");
 const errorsRoutes = require("./routes/errorsRoutes");
 
-const { deleteImage } = require("./utils/deleteImage");
+const { extractImageId } = require("./middlewares/fileUpload");
 
 const app = express();
 
@@ -49,7 +49,8 @@ app.use(errorsRoutes);
 
 app.use(async (error, req, res, next) => {
   if (req.file) {
-    const deletedImage = await deleteImage(req.file.path);
+    const imageId = await extractImageId(req.file);
+    const deletedImage = await cloudinary.uploader.destroy(imageId);
     if (!deletedImage) console.error("Failed to delete image");
   }
 
