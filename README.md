@@ -1,4 +1,4 @@
-# MERN Course
+# MERN Course (COMPLETED)
 
 [![portfolio](https://img.shields.io/badge/link_to_the_course-BE32F5?style=for-the-badge&logo=logoColor=white)](https://www.udemy.com/share/102fVS3@mKYgeebOMyUnFwzaqxN-66yBbiiNZjlp7BMFJl-B2F4IM58vOONUMXzt5-nzg41W7Q==/)
 
@@ -25,7 +25,7 @@
 
 - Node.js & Express.js - Building REST APIs backend
 
-### Section 4 ⏳
+### Section 4 ✅
 
 - Working with MongoDB & Mongoose - Refresher
 
