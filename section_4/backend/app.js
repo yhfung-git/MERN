@@ -18,10 +18,6 @@ const { deleteImage } = require("./utils/deleteImage");
 const app = express();
 
 app.use(express.json());
-app.use(
-  "/uploads/images",
-  express.static(path.join(__dirname, "uploads", "images"))
-);
 
 const allowedOrigins = [
   "http://localhost:3000",
