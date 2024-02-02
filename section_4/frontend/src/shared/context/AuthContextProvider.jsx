@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/UIElements/LoadingSpinner/LoadingSpinn
 let logoutTimer;
 
 const AuthContextProvider = (props) => {
+  const [isLoading, setIsLaoding] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState();
   const [expiration, setExpiration] = useState();
@@ -60,11 +61,13 @@ const AuthContextProvider = (props) => {
 
         if (response !== null) login(response.userId, data.expiration);
       }
+
+      setIsLaoding(false);
     };
     checkAuthStatus();
   }, [sendRequest, login]);
 
-  if (!isLoggedIn) return <LoadingSpinner asOverlay />;
+  if (isLoading) return <LoadingSpinner asOverlay />;
 
   const authContextValue = {
     isLoggedIn,
