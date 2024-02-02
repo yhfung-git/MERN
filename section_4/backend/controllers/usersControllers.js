@@ -6,6 +6,7 @@ const { JWT_PASSKEY, NODE_ENV } = process.env;
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
 const { normalizeEmail } = require("validator");
+const { uploadImage } = require("../middlewares/fileUpload");
 const User = require("../models/User");
 
 exports.getUsers = async (req, res, next) => {
@@ -26,12 +27,17 @@ exports.signup = async (req, res, next) => {
     const { name, email, password } = req.body;
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (!hashedPassword) throwError(500, "Failed to create account");
+
+    const imageFile = req.file;
+    const image = await uploadImage(imageFile);
+    if (!image) throwError(500, "Failed to upload image");
 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      image: req.file.path,
+      image,
       places: [],
     });
 
