@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./auth-context";
 import { useHttpClient } from "../hooks/http-hook";
+import LoadingSpinner from "../components/UIElements/LoadingSpinner/LoadingSpinner";
 
 let logoutTimer;
 
@@ -62,6 +63,8 @@ const AuthContextProvider = (props) => {
     };
     checkAuthStatus();
   }, [sendRequest, login]);
+
+  if (!isLoggedIn) return <LoadingSpinner asOverlay />;
 
   const authContextValue = {
     isLoggedIn,
