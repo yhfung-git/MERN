@@ -11,7 +11,7 @@ const {
   checkUpdatePlaceInput,
   checkCreatePlaceInput,
 } = require("../helpers/validators");
-const fileUpload = require("../middlewares/fileUpload");
+const { handleUpload } = require("../middlewares/fileUpload");
 const isAuth = require("../middlewares/isAuth");
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.get("/show/:pid", getPlaceById);
 router.post(
   "/new",
   isAuth,
-  fileUpload.single("image"),
+  handleUpload.single("image"),
   checkCreatePlaceInput,
   createPlace
 );
