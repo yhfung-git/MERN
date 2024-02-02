@@ -107,7 +107,7 @@ exports.checkAuthStatus = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    const clearedCookie = await res.clearCookie("token");
+    const clearedCookie = await res.clearCookie("token", { maxAge: 0 });
     if (!clearedCookie) {
       throwError(500, "An unknown error occurred during logout");
     }
