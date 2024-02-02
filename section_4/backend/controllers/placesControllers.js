@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
 
 const { throwError } = require("../helpers/errorHandler");
 const { validationErrorHandler } = require("../helpers/validationErrorHandler");
-const { deleteImage } = require("../utils/deleteImage");
+const { uploadImage, extractImageId } = require("../middlewares/fileUpload");
 const getCoordsForAddress = require("../utils/location");
 const Place = require("../models/Place");
 const User = require("../models/User");
@@ -46,13 +47,17 @@ exports.createPlace = async (req, res, next) => {
     const user = await User.findById(req.userId);
     if (!user) throwError(404, "User not found");
 
+    const imageFile = req.file;
+    const image = await uploadImage(imageFile);
+    if (!image) throwError(500, "Failed to upload image");
+
     const location = await getCoordsForAddress(address);
-    if (!location) return;
+    if (!location) throwError(500, "Failed to catch the address");
 
     const createdPlace = new Place({
       title,
       description,
-      image: req.file.path,
+      image,
       address,
       location,
       creator: req.userId,
@@ -137,8 +142,11 @@ exports.deletePlace = async (req, res, next) => {
 
     await session.commitTransaction();
 
-    const deletedImage = await deleteImage(place.image);
-    if (!deletedImage) console.error("Failed to delete image");
+    if (place.image) {
+      const imageId = await extractImageId(place.image);
+      const deletedImage = await cloudinary.uploader.destroy(imageId);
+      if (!deletedImage) throwError(500, "Failed to delete image");
+    }
 
     res.status(200).json({ message: "Place deleted!" });
   } catch (error) {
