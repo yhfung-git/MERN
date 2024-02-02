@@ -107,10 +107,12 @@ exports.checkAuthStatus = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    res
-      .clearCookie("token")
-      .status(200)
-      .json({ message: "Logged out successfully" });
+    const clearedCookie = await res.clearCookie("token");
+    if (!clearedCookie) {
+      throwError(500, "An unknown error occurred during logout");
+    }
+
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error(">>> logout", error);
     next(error);
